@@ -28,11 +28,13 @@ async function getPRDetails(): Promise<PRDetails> {
   const { repository, number } = JSON.parse(
     readFileSync(process.env.GITHUB_EVENT_PATH || "", "utf8")
   );
+  console.log(`Get PR details ${repository} - ${number}`);
   const prResponse = await octokit.pulls.get({
     owner: repository.owner.login,
     repo: repository.name,
     pull_number: number,
   });
+  console.log(prResponse);
   return {
     owner: repository.owner.login,
     repo: repository.name,
@@ -47,12 +49,14 @@ async function getDiff(
   repo: string,
   pull_number: number
 ): Promise<string | null> {
+  console.log(`Get diff ${owner} - ${repo} - ${pull_number}`);
   const response = await octokit.pulls.get({
     owner,
     repo,
     pull_number,
     mediaType: { format: "diff" },
   });
+  console.log(response);
   // @ts-expect-error - response.data is a string
   return response.data;
 }

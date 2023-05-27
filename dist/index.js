@@ -59,11 +59,13 @@ function getPRDetails() {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const { repository, number } = JSON.parse((0, fs_1.readFileSync)(process.env.GITHUB_EVENT_PATH || "", "utf8"));
+        console.log(`Get PR details ${repository} - ${number}`);
         const prResponse = yield octokit.pulls.get({
             owner: repository.owner.login,
             repo: repository.name,
             pull_number: number,
         });
+        console.log(prResponse);
         return {
             owner: repository.owner.login,
             repo: repository.name,
@@ -75,12 +77,14 @@ function getPRDetails() {
 }
 function getDiff(owner, repo, pull_number) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(`Get diff ${owner} - ${repo} - ${pull_number}`);
         const response = yield octokit.pulls.get({
             owner,
             repo,
             pull_number,
             mediaType: { format: "diff" },
         });
+        console.log(response);
         // @ts-expect-error - response.data is a string
         return response.data;
     });
